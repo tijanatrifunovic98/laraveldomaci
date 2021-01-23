@@ -28,3 +28,14 @@ Route::post('article','\App\Http\Controllers\ArticleController@store');
 Route::put('article','\App\Http\Controllers\ArticleController@store');
 //delete article
 Route::delete('article/{id}','\App\Http\Controllers\ArticleController@destroy');
+
+//List the articles,zove kontrolera
+Route::get('countries','\App\Http\Controllers\CountryController@index');
+//List single article
+Route::get('country/{id}','\App\Http\Controllers\CountryController@show');
+//Create new article
+Route::post('country','\App\Http\Controllers\CountryController@store');
+//Update article
+Route::put('country','\App\Http\Controllers\CountryController@store');
+//delete article
+Route::delete('country/{id}','\App\Http\Controllers\CountryController@destroy');
