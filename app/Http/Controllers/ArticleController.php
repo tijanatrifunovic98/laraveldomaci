@@ -74,4 +74,5 @@ class ArticleController extends Controller
         return new ArticleResources($article);
         }
     }
+   
 }
