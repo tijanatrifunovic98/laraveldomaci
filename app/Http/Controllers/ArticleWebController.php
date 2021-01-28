@@ -4,10 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Article;
+use Illuminate\Support\Facades\Storage;
 use DB;
 
 class ArticleWebController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth',['except'=>['index','show']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -60,7 +71,7 @@ class ArticleWebController extends Controller
          
          $article->title=$request->input('title');
          $article->body=$request->input('body');
-        // $article->user_id=auth()->user()->id;
+         $article->user_id=auth()->user()->id;
          $article->country_id=$request->input('countries');
          $article->save();
          return redirect('/articles')->with('success','Article Created');
@@ -89,9 +100,17 @@ class ArticleWebController extends Controller
      */
     public function edit($id)
     {
-        $countries = DB::table('countries')->pluck('name', 'id','city','population');
         $article= Article::find($id);
+        if(auth()->user()->id !==$article->user_id){
+            return redirect('/articles')->with('error','Unauthorized Page');
+            }
+        $countries = DB::table('countries')->pluck('name', 'id','city','population');
+       // $article= Article::find($id);
         return view('articles.edit')->with('article',$article)->with('countries',$countries);
+        
+    
+       
+      
     }
 
     /**
@@ -114,7 +133,7 @@ class ArticleWebController extends Controller
          $article=Article::find($id);
          $article->title=$request->input('title');
          $article->body=$request->input('body');
-        // $article->user_id=auth()->user()->id;
+         $article->user_id=auth()->user()->id;
          $article->country_id=$request->input('countries');
          $article->save();
          return redirect('/articles')->with('success','Article Updated');
@@ -132,6 +151,9 @@ class ArticleWebController extends Controller
     public function destroy($id)
     {
         $article=Article::find($id);
+        if(auth()->user()->id !==$article->user_id){
+            return redirect('/articles')->with('error','Unauthorized Page');
+            }
         $article->delete();
         return redirect('/articles')->with('success','Article Removed');
     }
